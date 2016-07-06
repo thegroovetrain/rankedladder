@@ -5,6 +5,18 @@
 
 import datetime
 
+class System(object):
+
+    def __init__(self, constant, tolerance):
+        self.__attributes = {'system_constant': constant,
+                             'system_tolerance': tolerance}
+    
+    @property
+    def constant(self): return self.__attributes['system_constant']
+
+    @property
+    def tolerance(self): return self.__attributes['system_tolerance']
+
 ################################################################################
 
 class Participant(object):
