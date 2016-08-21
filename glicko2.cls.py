@@ -6,16 +6,6 @@ class Glicko2(object):
         self.system = {'constant': constant,
                        'tolerance': tolerance}
     
-    def mu(self, rating):
-        return float((rating - 1500)) / 173.7178
-    def theta(self, deviation):
-        return float(deviation) / 173.7178
-    """
-    def g(self, theta):
-        return 1/(math.sqrt(1+(3*theta)/(math.pi ** 2)))
-    def E(self, p_mu, o_mu, o_theta):
-        return 1/(1+math.exp((-1 * g(o_theta)) * (p_mu - o_mu)))
-    """ 
     def getNewRating(self, player, period):
         """
         player: {'rating': Glicko Rating (r),
@@ -29,8 +19,13 @@ class Glicko2(object):
                   'deviation': the new Glicko Rating Deviation (RD)}
         """
         # step 2: convert glicko rating and deviation (r, RD) into glicko-2 equivalents (mu, theta)
-        player_mu = self.mu(player['rating'])
-        player_theta = self.theta(player['deviation'])
+        def mu(rating):
+            return float((rating - 1500)) / 173.7178
+        def theta(deviation):
+            return float(deviation) / 173.7178
+
+        player_mu = mu(player['rating'])
+        player_theta = theta(player['deviation'])
 
         # step 3: compute quanity v, the estimated variance of the team or player's rating based only
         # on the game outcomes
@@ -40,8 +35,8 @@ class Glicko2(object):
         delta = 0.0
         improvement = 0.0
         for i, match in enumerate(period):
-            opponent_mu = self.mu(match['opponent']['rating'])
-            opponent_theta = self.theta(match['opponent']['deviation'])
+            opponent_mu = mu(match['opponent']['rating'])
+            opponent_theta = theta(match['opponent']['deviation'])
             g = 1/(math.sqrt(1+(3*opponent_theta)/(math.pi ** 2)))
             E = 1/(1+math.exp((-1 * g) * (player_mu - opponent_mu)))
             v += ((g ** 2) * E * (1 - E))
