@@ -91,6 +91,8 @@ class Glicko2(object):
         return converted
 
 
+# TEST STUFF
+# until i write some actual documentation, have fun figuring out how it works from this lovely batch of code:
 g2eng = Glicko2()
 player = {'rating': 1500.0, 'deviation': 350.0, 'volatility': 0.06}
 period = [
@@ -98,6 +100,7 @@ period = [
 	{'score': 0, 'opponent': {'rating': 1500.0, 'deviation': 350.0}}
 	]
 updated = g2eng.getNewRating(player, period)
-print "NEW RATING:", updated['rating']
-print "NEW DEVIATION:", updated['deviation']
-print "NEW VOLATILITY:", updated['volatility']
+print "RATING:", player['rating'], "->", updated['rating']
+print "DEVIATION:", player['deviation'], "->", updated['deviation']
+print "RANGE: {", player['rating'] - (player['deviation'] * 2), "-", player['rating'] + (player['deviation'] * 2), ") -> (", updated['rating'] - (updated['deviation'] * 2), "-", updated['rating'] + (updated['deviation'] * 2), ")"
+print "VOLATILITY:",player['volatility'], "->", updated['volatility']
